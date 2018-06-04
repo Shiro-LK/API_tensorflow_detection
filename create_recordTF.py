@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 import cv2
 from object_detection.utils import dataset_util
-
+from optparse import OptionParser
 
 #flags = tf.app.flags
 #flags.DEFINE_string('output_path', 'aaa', 'Path to output TFRecord')
@@ -178,12 +178,8 @@ def write_map(class_map, filename_output='map_label.pbtxt'):
             else:
                 f.write('item {\n name: "'+dicbykey[num]+'"\n  id: '+str(num)+'\n}\n')
         
-def main():
-    output_train = 'train.record'
-    output_test = 'test.record'
-    output_label = 'raccoon_label.pbtxt'
-    filename = 'raccoon_dataset.txt'
-    path = os.getcwd()+'\\'+'raccoon\\'
+def main(filename = 'raccoon_dataset.txt', output_label = 'raccoon_label.pbtxt', output_train = 'train.record', output_test = 'test.record', path=''):
+
     all_data, classes_count, class_mapping, classes_count_train, classes_count_test = get_data(filename, path='')
     print(class_mapping)
     
@@ -204,4 +200,18 @@ def main():
     print('Successfully created the TFRecords: {}'.format(os.getcwd() + output_test))
     write_map(class_mapping, output_label)
     print('Successfully created the label file: {}'.format(os.getcwd() + output_label))
-main()
+    
+##### MAIN ######
+parser = OptionParser()
+parser.add_option('-f', "--filename", dest="filename", help='dataset filename', default='raccoon_dataset.txt')
+parser.add_option("--train_output", dest="train_output", help="name of the train record file", default='train.record')
+parser.add_option("--test_output", dest="test_output", help="name of the test record file", default='test.record')
+parser.add_option("--label_output", dest="label_output", help="name of the label pbtxt file", default='label.pbtxt')
+parser.add_option("-p", "--path", dest="path", help="path where images are", default='../dataset/')
+(options, args) = parser.parse_args()
+filename = options.filename
+output_train = options.train_output
+output_test = options.test_output
+output_label = options.label_output
+path = options.path
+main(filename=filename, output_train = output_train, output_test=output_test, output_label=output_label, path=path)
