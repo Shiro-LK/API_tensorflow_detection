@@ -5,11 +5,12 @@ import cv2
 from object_detection.utils import dataset_util
 from optparse import OptionParser
 
-#flags = tf.app.flags
-#flags.DEFINE_string('output_path', 'aaa', 'Path to output TFRecord')
-#FLAGS = flags.FLAGS
 
 def get_data(input_path, path='', channels=4):
+    '''
+        each line is supposed to be : filename_channel1, filename_channel2, etc .., width, height, x1, y1, x2, y2, class_name, imageset 
+        imageset : training or testing 
+    '''
     found_bg = False
     all_imgs = {}
 
@@ -218,9 +219,6 @@ def __main__(filename = 'raccoon_dataset.txt', output_label = 'raccoon_label.pbt
         convert from filename image to record
     '''
 
-    
-    
-    #path = os.getcwd()+'\\'+'raccoon\\'
     all_data, classes_count, class_mapping, classes_count_train, classes_count_test = get_data(filename, path=path, channels=num_channels)
     print(class_mapping)
     
@@ -234,7 +232,7 @@ def __main__(filename = 'raccoon_dataset.txt', output_label = 'raccoon_label.pbt
         elif data['imageset'] == 'testing':
             tf_example = create_one_tf_example(data, class_mapping, 'jpg', path=path, channels=num_channels)
             writer_test.write(tf_example.SerializeToString())
-#
+
     writer_train.close()
     writer_test.close()
     print('Successfully created the TFRecords: {}'.format(os.getcwd() + output_train))
