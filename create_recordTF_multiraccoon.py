@@ -138,7 +138,10 @@ def create_one_tf_example(data, class_map, path='', channels=4):
         
     # we consider that each image contain one channel
     for i in range(len(filename)):
-        temp = np.mean(cv2.imread(filename[i]), axis=-1)
+        img_temp = cv2.imread(filename[i])
+        if img_temp is None:
+            print('error loading img')
+        temp = np.mean(img_temp, axis=-1)
         if temp is None:
             print("can't open image, check path parameters ! ")
             return
