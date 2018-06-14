@@ -190,7 +190,7 @@ def create_one_tf_example(data, class_map, path='', channels=4):
       #'image/source_id': dataset_util.bytes_feature(filename),
       'image/channels': dataset_util.int64_feature(channels),
       'image/encoded': dataset_util.bytes_feature(img_encoded),
-      #'image/format': dataset_util.bytes_feature(image_format),
+      'image/format': dataset_util.bytes_feature(image_format),
       'image/object/bbox/xmin': dataset_util.float_list_feature(xmins),
       'image/object/bbox/xmax': dataset_util.float_list_feature(xmaxs),
       'image/object/bbox/ymin': dataset_util.float_list_feature(ymins),
